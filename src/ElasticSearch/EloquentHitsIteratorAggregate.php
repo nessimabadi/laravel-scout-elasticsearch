@@ -82,7 +82,7 @@ final class EloquentHitsIteratorAggregate implements \IteratorAggregate
      * @param $hits
      * @return \Illuminate\Support\Collection
      */
-    private function getHitsUsuarios($hits): Collection
+    private function getHitsUsuarios($hits)
     {
         $hits = collect($hits)->map(function ($hit) {
             if ($hit['_source']['__class_name'] === 'App\Usuario') {
