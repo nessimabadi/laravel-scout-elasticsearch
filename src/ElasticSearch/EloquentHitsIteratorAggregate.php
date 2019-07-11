@@ -48,6 +48,9 @@ final class EloquentHitsIteratorAggregate implements \IteratorAggregate
         $hits = collect();
         if ($this->results['hits']['total']) {
             $hits = $this->results['hits']['hits'];
+            
+            $hits = $this->getHitsUsuarios($hits);
+            
             $models = collect($hits)->groupBy('_source.__class_name')
                 ->map(function ($results, $class) {
                     $model = new $class;
@@ -71,5 +74,22 @@ final class EloquentHitsIteratorAggregate implements \IteratorAggregate
         }
 
         return new \ArrayIterator($hits);
+    }
+
+    /**
+     * Revisa si el class name es Usuario y lo cambia a UsuarioPortal
+     *
+     * @param $hits
+     * @return \Illuminate\Support\Collection
+     */
+    private function getHitsUsuarios($hits): Collection
+    {
+        $hits = collect($hits)->map(function ($hit) {
+            if ($hit['_source']['__class_name'] === 'App\Usuario') {
+                $hit['_source']['__class_name'] = 'App\UsuarioPortal';
+            }
+            return $hit;
+        });
+        return $hits;
     }
 }
