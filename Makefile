@@ -21,7 +21,8 @@ help: ## Show this help
 ---------------: ## ---------------
 
 up: ## Start all containers (in background) for development
-	$(docker_compose_bin) up --no-recreate -d
+	sudo sysctl -w vm.max_map_count=262144
+	$(docker_compose_bin) up -d
 
 down: ## Stop all started for development containers
 	$(docker_compose_bin) down
